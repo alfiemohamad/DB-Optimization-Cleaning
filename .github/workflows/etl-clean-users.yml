@@ -18,15 +18,24 @@ jobs:
 
       - name: Print environment variables for debug
         run: |
-          echo "PGHOST=$DB_HOST"
-          echo "PGUSER=$DB_USER"
-          echo "PGPASSWORD=$DB_PASSWORD"
-          echo "PGDATABASE=$DB_NAME"
+          echo "PGHOST=$PGHOST"
+          echo "PGUSER=$PGUSER"
+          echo "PGPASSWORD=$PGPASSWORD"
+          echo "PGDATABASE=$PGDATABASE"
         env:
-          PGHOST: ${{ secrets.DB_HOST }}
-          PGUSER: ${{ secrets.DB_USER }}
-          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
-          PGDATABASE: ${{ secrets.DB_NAME }}
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+
+      - name: Add indexes for optimization
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: |
+          psql -h $PGHOST -U $PGUSER -d $PGDATABASE -f scripts/add-indexes.sql
 
       - name: Run ETL cleaning script
         env:
