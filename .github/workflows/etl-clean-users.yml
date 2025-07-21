@@ -9,6 +9,20 @@ on:
 jobs:
   clean-users:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ secrets.PGUSER }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
+          POSTGRES_DB: ${{ secrets.PGDATABASE }}
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.PGUSER }}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -18,19 +32,14 @@ jobs:
 
       - name: Print environment variables for debug
         run: |
-          echo "PGHOST=$PGHOST"
-          echo "PGUSER=$PGUSER"
-          echo "PGPASSWORD=$PGPASSWORD"
-          echo "PGDATABASE=$PGDATABASE"
-        env:
-          PGHOST: ${{ secrets.PGHOST }}
-          PGUSER: ${{ secrets.PGUSER }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGDATABASE: ${{ secrets.PGDATABASE }}
+          echo "PGHOST=localhost"
+          echo "PGUSER=${{ secrets.PGUSER }}"
+          echo "PGPASSWORD=${{ secrets.PGPASSWORD }}"
+          echo "PGDATABASE=${{ secrets.PGDATABASE }}"
 
       - name: Add indexes for optimization
         env:
-          PGHOST: ${{ secrets.PGHOST }}
+          PGHOST: localhost
           PGUSER: ${{ secrets.PGUSER }}
           PGPASSWORD: ${{ secrets.PGPASSWORD }}
           PGDATABASE: ${{ secrets.PGDATABASE }}
@@ -39,7 +48,7 @@ jobs:
 
       - name: Run ETL cleaning script
         env:
-          PGHOST: ${{ secrets.PGHOST }}
+          PGHOST: localhost
           PGUSER: ${{ secrets.PGUSER }}
           PGPASSWORD: ${{ secrets.PGPASSWORD }}
           PGDATABASE: ${{ secrets.PGDATABASE }}
