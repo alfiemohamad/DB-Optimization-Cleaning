@@ -33,8 +33,3 @@ jobs:
           files: ./coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
-          slug: alfiemohamad/DB-Optimization-Cleaning
-      - name: Notify on failure
-        if: failure()
-        run: echo "Tests failed, please check the logs for details."
-        continue-on-error: true 
