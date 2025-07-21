@@ -18,15 +18,15 @@ jobs:
 
       - name: Print environment variables for debug
         run: |
-          echo "PGHOST=$PGHOST"
-          echo "PGUSER=$PGUSER"
-          echo "PGPASSWORD=$PGPASSWORD"
-          echo "PGDATABASE=$PGDATABASE"
+          echo "PGHOST=$DB_HOST"
+          echo "PGUSER=$DB_USER"
+          echo "PGPASSWORD=$DB_PASSWORD"
+          echo "PGDATABASE=$DB_NAME"
         env:
-          PGHOST: ${{ secrets.PGHOST }}
-          PGUSER: ${{ secrets.PGUSER }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGDATABASE: ${{ secrets.PGDATABASE }}
+          PGHOST: ${{ secrets.DB_HOST }}
+          PGUSER: ${{ secrets.DB_USER }}
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+          PGDATABASE: ${{ secrets.DB_NAME }}
 
       - name: Run ETL cleaning script
         env:
