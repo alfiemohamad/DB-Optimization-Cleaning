@@ -1,0 +1,26 @@
+name: ETL Clean Users
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  clean-users:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Run ETL cleaning script
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: |
+          psql -h $PGHOST -U $PGUSER -d $PGDATABASE -f scripts/clean-users.sql
